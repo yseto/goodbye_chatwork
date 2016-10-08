@@ -149,6 +149,10 @@ module GoodbyeChatwork
             ac = self.account(i['aid'])
             csv << [Time.at(i['tm']).iso8601,
               (ac ? ac['name'] : i['aid']), i['msg']]
+
+            if opt[:remove_chat] && i['aid'].to_s == @myid
+              @client.get "/gateway.php?cmd=delete_chat&myid=#{@myid}&_v=1.80a&_av=4&_t=#{@token}&ln=ja&chat_id=#{i['id']}&room_id=#{room_id}"
+            end
           end
           break if r.size < CHAT_SIZE
           fid = r.last['id']
